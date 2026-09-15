@@ -1,0 +1,209 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Victor Pass">
+    <section class="hero">
+        <div class="hero-content">
+            <p class="eyebrow">Victor Pass Development</p>
+
+            <h1>Software built to solve interesting problems.</h1>
+
+            <p class="lede">
+                Victor Pass is an independent software and technology company
+                experimenting with useful tools, thoughtful engineering, and new
+                ideas.
+            </p>
+
+            <div class="actions">
+                <a class="button primary" href="/products/">
+                    Explore products
+                </a>
+                <a class="button" href="/about/">
+                    About Victor Pass
+                </a>
+            </div>
+        </div>
+
+        <div class="logo">
+            <img src="/VictorPass.logo.png" alt="Victor Pass logo" />
+        </div>
+    </section>
+
+    <section class="features" aria-label="What we build">
+        <article>
+            <span class="number">01</span>
+            <h2>Useful software</h2>
+            <p>
+                Small applications designed around real problems rather than
+                features for their own sake.
+            </p>
+        </article>
+
+        <article>
+            <span class="number">02</span>
+            <h2>Good engineering</h2>
+            <p>
+                Modern web technologies, pragmatic architecture, and an emphasis
+                on software that remains understandable.
+            </p>
+        </article>
+
+        <article>
+            <span class="number">03</span>
+            <h2>Experiments</h2>
+            <p>
+                Not every idea becomes a product. Building and testing ideas is
+                part of the process.
+            </p>
+        </article>
+    </section>
+
+    <section class="callout">
+        <p class="eyebrow">Currently building</p>
+        <h2>A few ideas are taking shape.</h2>
+        <p>Explore the projects currently under development at Victor Pass.</p>
+        <a href="/products/">View products →</a>
+    </section>
+</Layout>
+
+<style>
+    .hero {
+        min-height: 70vh;
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        align-items: center;
+        gap: 4rem;
+        padding: 5rem 0;
+    }
+
+    .eyebrow {
+        margin: 0 0 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.8rem;
+        font-weight: 700;
+        opacity: 0.65;
+    }
+
+    h1 {
+        max-width: 800px;
+        margin: 0;
+        font-size: clamp(3rem, 7vw, 6rem);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+    }
+
+    .lede {
+        max-width: 650px;
+        margin: 2rem 0;
+        font-size: 1.25rem;
+        line-height: 1.6;
+        opacity: 0.75;
+    }
+
+    .logo {
+        display: grid;
+        place-items: center;
+    }
+
+    .logo img {
+        width: min(100%, 420px);
+        height: auto;
+        filter: drop-shadow(0 1rem 2rem rgb(0 0 0 / 15%));
+        transition: transform 500ms ease;
+    }
+
+    .logo img:hover {
+        transform: rotate(-2deg) scale(1.03);
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 0.8rem 1.2rem;
+        border: 1px solid currentColor;
+        border-radius: 999px;
+        text-decoration: none;
+        transition:
+            transform 150ms ease,
+            background 150ms ease;
+    }
+
+    .button:hover {
+        transform: translateY(-2px);
+    }
+
+    .button.primary {
+        background: currentColor;
+        color: var(--page-background);
+    }
+
+    .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        padding: 5rem 0;
+        border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+    }
+
+    .features article {
+        padding: 1.5rem 0;
+    }
+
+    .number {
+        font-family: monospace;
+        opacity: 0.5;
+    }
+
+    .features h2 {
+        margin: 1rem 0 0.5rem;
+    }
+
+    .features p {
+        line-height: 1.6;
+        opacity: 0.7;
+    }
+
+    .callout {
+        padding: 5rem;
+        margin: 2rem 0 5rem;
+        border-radius: 1.5rem;
+        background: color-mix(in srgb, currentColor 7%, transparent);
+    }
+
+    .callout h2 {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 4rem);
+    }
+
+    .callout p:not(.eyebrow) {
+        max-width: 600px;
+        line-height: 1.6;
+        opacity: 0.7;
+    }
+
+    @media (max-width: 700px) {
+        .hero {
+            grid-template-columns: 1fr;
+            padding: 3rem 0;
+        }
+
+        .logo {
+            order: -1;
+        }
+
+        .features {
+            grid-template-columns: 1fr;
+        }
+
+        .callout {
+            padding: 2rem;
+        }
+    }
+</style>

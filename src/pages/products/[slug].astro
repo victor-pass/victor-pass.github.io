@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+    const products = await getCollection("products");
+
+    return products.map((product) => ({
+        params: { slug: product.id },
+        props: { product },
+    }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+---
+
+<Layout title={`${product.data.title} | Victor Pass`}>
+    <article class="page">
+        <a href="/products/">← Products</a>
+
+        <p class="eyebrow">{product.data.status}</p>
+
+        <h1>{product.data.title}</h1>
+
+        <p class="description">{product.data.description}</p>
+
+        <div class="content">
+            <Content />
+        </div>
+    </article>
+</Layout>
+
+<style>
+    .page {
+        max-width: 800px;
+        padding: 6rem 0;
+    }
+
+    .eyebrow {
+        margin-top: 4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.8rem;
+        font-weight: 700;
+        opacity: 0.65;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: clamp(3rem, 8vw, 6rem);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+    }
+
+    .description {
+        font-size: 1.3rem;
+        line-height: 1.6;
+        opacity: 0.7;
+    }
+
+    .content {
+        margin-top: 4rem;
+        line-height: 1.7;
+    }
+</style>

@@ -1,0 +1,73 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="About | Victor Pass">
+    <article class="page">
+        <p class="eyebrow">About</p>
+
+        <h1>Victor Pass</h1>
+
+        <p class="intro">
+            Victor Pass is an independent software and technology company
+            focused on building useful software and exploring interesting
+            technical problems.
+        </p>
+
+        <h2>What we're working on</h2>
+
+        <p>
+            Victor Pass is intentionally small. Some projects start as
+            experiments, some become products, and some exist primarily to
+            explore an idea.
+        </p>
+
+        <p>
+            The common thread is an interest in software that solves concrete
+            problems while remaining simple enough to understand and maintain.
+        </p>
+
+        <h2>Contact</h2>
+
+        <p>Interested in a project, collaboration, or working together?</p>
+
+        <p>
+            <a href="mailto:hello@victorpass.dev">hello@victorpass.dev</a>
+        </p>
+    </article>
+</Layout>
+
+<style>
+    .page {
+        max-width: 800px;
+        padding: 6rem 0;
+    }
+
+    .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.8rem;
+        font-weight: 700;
+        opacity: 0.65;
+    }
+
+    h1 {
+        margin: 0 0 2rem;
+        font-size: clamp(3rem, 8vw, 6rem);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+    }
+
+    h2 {
+        margin-top: 4rem;
+    }
+
+    p {
+        line-height: 1.7;
+    }
+
+    .intro {
+        font-size: 1.4rem;
+        opacity: 0.75;
+    }
+</style>
