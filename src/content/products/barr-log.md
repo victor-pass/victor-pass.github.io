@@ -22,4 +22,4 @@ Track focused sessions, keep them attached to projects, and build a useful histo
 
 The project is also an experiment in building a small, focused application from the ground up, with the goal of learning what makes work tracking genuinely useful rather than simply adding more metrics.
 
-**Status:** Demo available at [barr.victorpass.dev](https://barr.victorpass.dev/).
+**Status:** Demo available at [barrlog.victorpass.dev](https://barrlog.victorpass.dev/).
