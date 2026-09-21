@@ -8,7 +8,7 @@ status: Demo Available
 
 **A simple work log for focused projects.**
 
-BarrLog helps you record what you worked on, how long you spent on it, and how your projects progress over time.
+BarrLog helps you record what you worked on, how long you spent on it, and how that time adds up over time.
 
 It started with a practical problem: when working on several projects, it is surprisingly difficult to reconstruct where the time actually went.
 
@@ -18,7 +18,7 @@ Rather than building another elaborate productivity system, BarrLog focuses on t
 
 BarrLog is designed to make logging work quick enough that it does not become another task on your list.
 
-Track focused sessions, keep them attached to projects, and build a useful history without maintaining a complicated timesheet or productivity ritual.
+Track focused sessions, tag them with labels, and build a useful history without maintaining a complicated timesheet or productivity ritual.
 
 The project is also an experiment in building a small, focused application from the ground up, with the goal of learning what makes work tracking genuinely useful rather than simply adding more metrics.
 
