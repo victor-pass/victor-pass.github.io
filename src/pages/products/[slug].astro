@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import ProductCarousel from "../../components/ProductCarousel.tsx";
 
 export async function getStaticPaths() {
     const products = await getCollection("products");
@@ -13,46 +14,67 @@ export async function getStaticPaths() {
 
 const { product } = Astro.props;
 const { Content } = await render(product);
+const screenshots = product.data.screenshots ?? [];
 ---
 
 <Layout title={`${product.data.title} | Victor Pass`}>
     <article class="page">
         <a href="/products/">← Products</a>
 
-        <p class="eyebrow">{product.data.status}</p>
+        <div class="hero">
+            <div class="hero-text">
+                <p class="eyebrow">{product.data.status}</p>
 
-        <h1>{product.data.title}</h1>
+                <h1>{product.data.title}</h1>
 
-        <p class="description">{product.data.description}</p>
+                <p class="description">{product.data.description}</p>
 
-        {product.data.url && (
-            <a class="cta" href={product.data.url} target="_blank" rel="noopener">
-                Visit {product.data.title} →
-            </a>
-        )}
+                {product.data.url && (
+                    <a
+                        class="cta"
+                        href={product.data.url}
+                        target="_blank"
+                        rel="noopener"
+                    >
+                        Visit {product.data.title} →
+                    </a>
+                )}
 
-        {product.data.screenshots && product.data.screenshots.length > 0 && (
-            <div class="screenshots">
-                {product.data.screenshots.map((src) => (
-                    <img src={src} alt={`${product.data.title} screenshot`} />
-                ))}
+                <div class="content">
+                    <Content />
+                </div>
             </div>
-        )}
 
-        <div class="content">
-            <Content />
+            {screenshots.length > 0 && (
+                <div class="hero-media">
+                    <div class="media-frame">
+                        <ProductCarousel
+                            client:load
+                            images={screenshots}
+                            alt={product.data.title}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     </article>
 </Layout>
 
 <style>
     .page {
-        max-width: 800px;
+        max-width: 1100px;
         padding: 6rem 0;
     }
 
+    .hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+        gap: 3rem;
+        margin-top: 2rem;
+    }
+
     .eyebrow {
-        margin-top: 4rem;
         text-transform: uppercase;
         letter-spacing: 0.12em;
         font-size: 0.8rem;
@@ -62,25 +84,26 @@ const { Content } = await render(product);
 
     h1 {
         margin: 0;
-        font-size: clamp(3rem, 8vw, 6rem);
+        font-size: clamp(2.75rem, 6vw, 4.5rem);
         line-height: 0.95;
         letter-spacing: -0.04em;
     }
 
     .description {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
         line-height: 1.6;
         opacity: 0.7;
+        margin: 1.5rem 0;
     }
 
     .cta {
         display: inline-block;
-        margin-top: 2rem;
+        margin-top: 0.5rem;
         padding: 0.8rem 1.2rem;
         border: 1px solid currentColor;
         border-radius: 999px;
         text-decoration: none;
-        background: currentColor;
+        background: var(--muted);
         color: var(--page-background);
         transition: transform 150ms ease;
     }
@@ -89,22 +112,19 @@ const { Content } = await render(product);
         transform: translateY(-2px);
     }
 
-    .screenshots {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1.5rem;
-        margin-top: 3rem;
-    }
-
-    .screenshots img {
-        width: 100%;
-        border-radius: 1rem;
-        border: 1px solid var(--border);
-        display: block;
+    .hero-media {
+        min-width: 0;
     }
 
     .content {
-        margin-top: 4rem;
+        max-width: 800px;
+        margin-top: 5rem;
         line-height: 1.7;
+    }
+
+    @media (max-width: 800px) {
+        .hero {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
