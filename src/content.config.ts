@@ -8,6 +8,8 @@ const products = defineCollection({
     title: z.string(),
     description: z.string(),
     status: z.string(),
+    url: z.string().url().optional(),
+    screenshots: z.array(z.string()).optional(),
   }),
 });
 

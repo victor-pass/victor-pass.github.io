@@ -2,6 +2,9 @@
 title: BarrLog
 description: A lightweight tool for tracking focused work and understanding where your time goes.
 status: Demo Available
+url: https://barrlog.victorpass.dev
+screenshots:
+  - /products/barrlog-mobile.png
 ---
 
 # BarrLog
@@ -18,7 +21,7 @@ Rather than building another elaborate productivity system, BarrLog focuses on t
 
 BarrLog is designed to make logging work quick enough that it does not become another task on your list.
 
-Track focused sessions, tag them with labels, and build a useful history without maintaining a complicated timesheet or productivity ritual.
+Sign in, record a session with a label and how long it took, and edit or remove entries as plans change. Over time that builds a useful history without maintaining a complicated timesheet or productivity ritual.
 
 The project is also an experiment in building a small, focused application from the ground up, with the goal of learning what makes work tracking genuinely useful rather than simply adding more metrics.
 

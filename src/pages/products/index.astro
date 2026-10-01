@@ -19,6 +19,13 @@ const products = await getCollection("products");
         <div class="products">
             {products.map((product) => (
                 <a class="product" href={`/products/${product.id}/`}>
+                    {product.data.screenshots?.[0] && (
+                        <img
+                            class="thumb"
+                            src={product.data.screenshots[0]}
+                            alt={`${product.data.title} screenshot`}
+                        />
+                    )}
                     <span>{product.data.status}</span>
                     <h2>{product.data.title}</h2>
                     <p>{product.data.description}</p>
@@ -78,6 +85,17 @@ const products = await getCollection("products");
     .product:hover {
         transform: translateY(-4px);
         border-color: currentColor;
+    }
+
+    .product .thumb {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 0.5rem;
+        margin: -0.5rem -0.5rem 1rem;
+        width: calc(100% + 1rem);
     }
 
     .product span {
