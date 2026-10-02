@@ -1,18 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ProductCard from "../components/ProductCard.astro";
+import { getCollection } from "astro:content";
+
+const products = await getCollection("products");
 ---
 
 <Layout title="Victor Pass">
     <section class="hero">
         <div class="hero-content">
-            <p class="eyebrow">Victor Pass Development</p>
+            <p class="eyebrow">Victor Pass Development · Colorado Springs</p>
 
-            <h1>Software built to solve interesting problems.</h1>
+            <h1>I build small tools, in public.</h1>
 
             <p class="lede">
-                Victor Pass is an independent software and technology company
-                experimenting with useful tools, thoughtful engineering, and new
-                ideas.
+                Victor Pass is one engineer. I write software with a bias toward
+                tools small enough to keep in your head, and I'd rather ship one
+                thing properly than four things badly.
             </p>
 
             <div class="actions">
@@ -30,40 +34,46 @@ import Layout from "../layouts/Layout.astro";
         </div>
     </section>
 
-    <section class="features" aria-label="What we build">
+    <section class="features" aria-label="What I build">
         <article>
             <span class="number">01</span>
-            <h2>Useful software</h2>
+            <h2>Small enough to understand</h2>
             <p>
-                Small applications designed around real problems rather than
-                features for their own sake.
+                Interface simplicity first, internal simplicity second. A tool I
+                can't hold in my head is one I'll eventually be afraid to
+                change.
             </p>
         </article>
 
         <article>
             <span class="number">02</span>
-            <h2>Good engineering</h2>
+            <h2>Evidence over instinct</h2>
             <p>
-                Modern web technologies, pragmatic architecture, and an emphasis
-                on software that remains understandable.
+                I've benchmarked my own "optimizations" before and found I was
+                measuring noise. Checking is cheaper than assuming.
             </p>
         </article>
 
         <article>
             <span class="number">03</span>
-            <h2>Experiments</h2>
+            <h2>Ideas stay visible</h2>
             <p>
-                Not every idea becomes a product. Building and testing ideas is
-                part of the process.
+                Not every idea becomes a product. I'd rather show the ones that
+                didn't pan out than pretend only the successes happened.
             </p>
         </article>
     </section>
 
     <section class="callout">
         <p class="eyebrow">Currently building</p>
-        <h2>A few ideas are taking shape.</h2>
-        <p>Explore the projects currently under development at Victor Pass.</p>
-        <a href="/products/">View products →</a>
+        <h2>Tools in progress.</h2>
+        <p>What I'm building at Victor Pass right now, with live demos.</p>
+
+        <div class="products">
+            {products.map((product) => (
+                <ProductCard product={product} />
+            ))}
+        </div>
     </section>
 </Layout>
 
@@ -182,10 +192,21 @@ import Layout from "../layouts/Layout.astro";
         font-size: clamp(2rem, 5vw, 4rem);
     }
 
-    .callout p:not(.eyebrow) {
+    .callout > p:not(.eyebrow) {
         max-width: 600px;
         line-height: 1.6;
         opacity: 0.7;
+    }
+
+    .callout .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-top: 3rem;
+    }
+
+    .callout .products :global(.product) {
+        background: var(--page-background);
     }
 
     @media (max-width: 700px) {

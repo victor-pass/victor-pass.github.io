@@ -1,0 +1,68 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+    product: CollectionEntry<"products">;
+}
+
+const { product } = Astro.props;
+---
+
+<a class="product" href={`/products/${product.id}/`}>
+    {product.data.screenshots?.[0] && (
+        <img
+            class="thumb"
+            src={product.data.screenshots[0]}
+            alt={`${product.data.title} screenshot`}
+        />
+    )}
+    <span>{product.data.status}</span>
+    <h2>{product.data.title}</h2>
+    <p>{product.data.description}</p>
+    <strong>Learn more →</strong>
+</a>
+
+<style>
+    .product {
+        display: block;
+        padding: 2rem;
+        border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+        border-radius: 1rem;
+        color: inherit;
+        text-decoration: none;
+        transition:
+            transform 150ms ease,
+            border-color 150ms ease;
+    }
+
+    .product:hover {
+        transform: translateY(-4px);
+        border-color: currentColor;
+    }
+
+    .product .thumb {
+        display: block;
+        width: calc(100% + 1rem);
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 0.5rem;
+        margin: -0.5rem -0.5rem 1rem;
+    }
+
+    .product span {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.5;
+    }
+
+    .product h2 {
+        margin: 1rem 0 0.5rem;
+    }
+
+    .product p {
+        line-height: 1.6;
+        opacity: 0.7;
+    }
+</style>
