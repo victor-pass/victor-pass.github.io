@@ -10,59 +10,106 @@ const { product } = Astro.props;
 
 <a class="product" href={`/products/${product.id}/`}>
     {product.data.screenshots?.[0] && (
-        <img
-            class="thumb"
-            src={product.data.screenshots[0]}
-            alt={`${product.data.title} screenshot`}
-        />
+        <div class="thumb">
+            <img
+                src={product.data.screenshots[0]}
+                alt={`${product.data.title} screenshot`}
+                loading="lazy"
+            />
+        </div>
     )}
-    <span>{product.data.status}</span>
-    <h2>{product.data.title}</h2>
-    <p>{product.data.description}</p>
-    <strong>Learn more →</strong>
+    <div class="body">
+        <span class="status">{product.data.status}</span>
+        <h3>{product.data.title}</h3>
+        <p>{product.data.description}</p>
+        <span class="more">Learn more <span aria-hidden="true">→</span></span>
+    </div>
 </a>
 
 <style>
     .product {
-        display: block;
-        padding: 2rem;
-        border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
-        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
         color: inherit;
         text-decoration: none;
         transition:
-            transform 150ms ease,
-            border-color 150ms ease;
+            transform 250ms var(--ease),
+            box-shadow 250ms var(--ease),
+            border-color 250ms ease;
     }
 
     .product:hover {
         transform: translateY(-4px);
-        border-color: currentColor;
+        box-shadow: var(--shadow);
+        border-color: color-mix(in srgb, var(--ink) 25%, var(--border));
     }
 
-    .product .thumb {
-        display: block;
-        width: calc(100% + 1rem);
+    .thumb {
         aspect-ratio: 16 / 10;
+        overflow: hidden;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .thumb img {
+        display: block;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        object-position: top;
-        border-radius: 0.5rem;
-        margin: -0.5rem -0.5rem 1rem;
+        object-position: 50% 15%;
+        transition: transform 500ms var(--ease);
     }
 
-    .product span {
-        font-size: 0.75rem;
+    .product:hover .thumb img {
+        transform: scale(1.03);
+    }
+
+    .body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 1.5rem 1.75rem 1.75rem;
+    }
+
+    .status {
+        align-self: flex-start;
+        padding: 0.3rem 0.65rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--accent) 10%, transparent);
+        color: var(--accent);
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        opacity: 0.5;
     }
 
-    .product h2 {
-        margin: 1rem 0 0.5rem;
+    h3 {
+        margin: 1rem 0 0.4rem;
+        font-size: 1.4rem;
+        letter-spacing: -0.02em;
     }
 
-    .product p {
+    p {
+        flex: 1;
+        margin: 0 0 1.25rem;
+        color: var(--muted);
         line-height: 1.6;
-        opacity: 0.7;
+    }
+
+    .more {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .more span {
+        display: inline-block;
+        transition: transform 200ms var(--ease);
+    }
+
+    .product:hover .more span {
+        transform: translateX(4px);
     }
 </style>

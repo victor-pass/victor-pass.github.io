@@ -18,20 +18,20 @@ const screenshots = product.data.screenshots ?? [];
 ---
 
 <Layout title={`${product.data.title} | Victor Pass`}>
-    <article class="page">
-        <a href="/products/">← Products</a>
+    <article class="container page">
+        <a class="back" href="/products/">← All products</a>
 
         <div class="hero">
             <div class="hero-text">
                 <p class="eyebrow">{product.data.status}</p>
 
-                <h1>{product.data.title}</h1>
+                <h1 class="display">{product.data.title}</h1>
 
                 <p class="description">{product.data.description}</p>
 
                 {product.data.url && (
                     <a
-                        class="cta"
+                        class="button primary"
                         href={product.data.url}
                         target="_blank"
                         rel="noopener"
@@ -39,10 +39,6 @@ const screenshots = product.data.screenshots ?? [];
                         Visit {product.data.title} →
                     </a>
                 )}
-
-                <div class="content">
-                    <Content />
-                </div>
             </div>
 
             {screenshots.length > 0 && (
@@ -57,59 +53,43 @@ const screenshots = product.data.screenshots ?? [];
                 </div>
             )}
         </div>
+
+        <div class="prose content">
+            <Content />
+        </div>
     </article>
 </Layout>
 
 <style>
     .page {
-        max-width: 1100px;
-        padding: 6rem 0;
+        padding-top: 3rem;
+    }
+
+    .back {
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .back:hover {
+        color: var(--ink);
     }
 
     .hero {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        align-items: start;
+        grid-template-columns: 1.1fr 1fr;
+        align-items: center;
         gap: 3rem;
-        margin-top: 2rem;
-    }
-
-    .eyebrow {
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        font-size: 0.8rem;
-        font-weight: 700;
-        opacity: 0.65;
-    }
-
-    h1 {
-        margin: 0;
-        font-size: clamp(2.75rem, 6vw, 4.5rem);
-        line-height: 0.95;
-        letter-spacing: -0.04em;
+        margin-top: 2.5rem;
     }
 
     .description {
+        max-width: 32rem;
+        margin: 1.5rem 0 2rem;
+        color: var(--muted);
         font-size: 1.25rem;
         line-height: 1.6;
-        opacity: 0.7;
-        margin: 1.5rem 0;
-    }
-
-    .cta {
-        display: inline-block;
-        margin-top: 0.5rem;
-        padding: 0.8rem 1.2rem;
-        border: 1px solid currentColor;
-        border-radius: 999px;
-        text-decoration: none;
-        background: var(--muted);
-        color: var(--page-background);
-        transition: transform 150ms ease;
-    }
-
-    .cta:hover {
-        transform: translateY(-2px);
     }
 
     .hero-media {
@@ -117,9 +97,9 @@ const screenshots = product.data.screenshots ?? [];
     }
 
     .content {
-        max-width: 800px;
         margin-top: 5rem;
-        line-height: 1.7;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
     }
 
     @media (max-width: 800px) {

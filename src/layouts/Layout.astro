@@ -1,26 +1,42 @@
 ---
 interface Props {
     title?: string;
+    description?: string;
+    /** Header floats transparently over a full-bleed hero image. */
+    overlay?: boolean;
 }
 
-const { title = "Victor Pass" } = Astro.props;
+const {
+    title = "Victor Pass",
+    description = "Victor Pass Development — small, focused software built in Colorado Springs.",
+    overlay = false,
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/png" href="/VictorPass.logo.png" />
-        <meta name="description" content="Victor Pass Development" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <meta name="description" content={description} />
+        <meta name="theme-color" content="#12211e" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
         <title>{title}</title>
     </head>
 
     <body>
-        <header>
-            <nav>
+        <header class:list={["site-header", { overlay }]}>
+            <nav class="container">
                 <a class="brand" href="/">
-                    <img class="icon" src="/icon.svg" /> Victor Pass
+                    <img class="icon" src="/icon.svg" alt="" />
+                    <span>Victor Pass</span>
                 </a>
 
                 <div class="links">
@@ -34,94 +50,314 @@ const { title = "Victor Pass" } = Astro.props;
             <slot />
         </main>
 
-        <footer>
-            <p>© {new Date().getFullYear()} Victor Pass Development</p>
+        <footer class="site-footer">
+            <div class="container">
+                <div>
+                    <strong>Victor Pass Development</strong>
+                    <p>Colorado Springs, Colorado · 38.8° N, 104.8° W</p>
+                </div>
+                <div class="footer-meta">
+                    <a href="mailto:hello@victorpass.dev">hello@victorpass.dev</a>
+                    <p>© {new Date().getFullYear()}</p>
+                </div>
+            </div>
         </footer>
     </body>
 </html>
 
-<style>
-    :global(:root) {
-        --page-background: #faf9f6;
-        --text: #1c1c1a;
-        --muted: #666660;
-        --border: #deded8;
-        --content-width: 1100px;
+<style is:global>
+    :root {
+        /* Palette pulled from the logo and the road up to Victor:
+           deep pine ink, logo teal, Pikes Peak granite and Gold Camp clay. */
+        --ink: #12211e;
+        --ink-soft: #2b3a36;
+        --paper: #f7f5f0;
+        --surface: #ffffff;
+        --muted: #5f6763;
+        --border: #e3dfd6;
+        --accent: #1b6f8c;
+        --clay: #b5653c;
+        --granite: #d8cbb8;
+
+        /* Legacy names used by components */
+        --page-background: var(--paper);
+        --text: var(--ink);
+
+        --content-width: 1120px;
+        --gutter: clamp(1rem, 4vw, 2rem);
+        --radius: 1rem;
+        --shadow: 0 1px 2px rgb(18 33 30 / 6%), 0 12px 32px -12px rgb(18 33 30 / 18%);
+        --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
     }
 
-    :global(*) {
+    *,
+    *::before,
+    *::after {
         box-sizing: border-box;
     }
 
-    :global(html) {
-        background: var(--page-background);
-        color: var(--text);
+    html {
+        background: var(--paper);
+        color: var(--ink);
         font-family:
+            Inter,
             system-ui,
             -apple-system,
             BlinkMacSystemFont,
             "Segoe UI",
             sans-serif;
+        font-feature-settings: "ss01", "cv11";
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
     }
 
-    :global(body) {
+    body {
         margin: 0;
         min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
-    :global(a) {
+    main {
+        flex: 1;
+    }
+
+    a {
         color: inherit;
     }
 
-    header {
-        border-bottom: 1px solid var(--border);
+    img {
+        max-width: 100%;
     }
 
-    nav {
-        max-width: var(--content-width);
+    ::selection {
+        background: color-mix(in srgb, var(--accent) 25%, transparent);
+    }
+
+    .container {
+        width: 100%;
+        max-width: calc(var(--content-width) + 2 * var(--gutter));
         margin: 0 auto;
-        padding: 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        padding-inline: var(--gutter);
     }
 
-    .brand {
-        font-size: 1.1rem;
+    /* ---- Shared type ---- */
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin: 0 0 1.25rem;
+        color: var(--clay);
+        font-size: 0.75rem;
         font-weight: 700;
-        text-decoration: none;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+        content: "";
+        width: 1.5rem;
+        height: 2px;
+        background: currentColor;
+    }
+
+    .display {
+        margin: 0;
+        font-size: clamp(2.6rem, 6.5vw, 5rem);
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.035em;
+        text-wrap: balance;
+    }
+
+    .section-title {
+        margin: 0;
+        font-size: clamp(1.9rem, 4vw, 2.75rem);
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.025em;
+        text-wrap: balance;
+    }
+
+    .lede {
+        max-width: 38rem;
+        margin: 1.5rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 2vw, 1.3rem);
+        line-height: 1.6;
+    }
+
+    .prose {
+        max-width: 42rem;
+        font-size: 1.075rem;
+        line-height: 1.75;
+    }
+
+    .prose h1 {
+        display: none; /* product markdown repeats the page title */
+    }
+
+    .prose h2 {
+        margin: 3rem 0 0.75rem;
+        font-size: 1.5rem;
         letter-spacing: -0.02em;
     }
 
-    img.icon {
-        height: 2rem;
+    .prose a {
+        color: var(--accent);
+        text-underline-offset: 0.2em;
+    }
+
+    /* ---- Buttons ---- */
+
+    .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.35rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--ink);
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        transition:
+            transform 200ms var(--ease),
+            background 200ms ease,
+            border-color 200ms ease;
+    }
+
+    .button:hover {
+        transform: translateY(-2px);
+        border-color: var(--ink);
+    }
+
+    .button.primary {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--paper);
+    }
+
+    .button.primary:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            transition: none !important;
+            animation: none !important;
+        }
+    }
+</style>
+
+<style>
+    .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: color-mix(in srgb, var(--paper) 85%, transparent);
+        backdrop-filter: saturate(1.4) blur(12px);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .site-header.overlay {
+        position: absolute;
+        inset: 0 0 auto;
+        background: transparent;
+        backdrop-filter: none;
+        border-bottom-color: rgb(255 255 255 / 15%);
+        color: #fff;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 4.25rem;
+    }
+
+    .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        text-decoration: none;
+    }
+
+    .icon {
+        height: 1.9rem;
+        width: auto;
+    }
+
+    .overlay .icon {
+        filter: brightness(0) invert(1);
     }
 
     .links {
         display: flex;
-        gap: 1.5rem;
+        gap: clamp(1rem, 3vw, 2rem);
+        font-size: 0.95rem;
+        font-weight: 500;
     }
 
     .links a {
-        color: var(--muted);
+        opacity: 0.75;
         text-decoration: none;
+        transition: opacity 150ms ease;
     }
 
     .links a:hover {
-        color: var(--text);
+        opacity: 1;
     }
 
-    main {
-        max-width: var(--content-width);
-        margin: 0 auto;
-        padding: 0 1.25rem;
+    .site-footer {
+        margin-top: 5rem;
+        padding: 3rem 0;
+        background: var(--ink);
+        color: color-mix(in srgb, var(--paper) 70%, transparent);
+        font-size: 0.9rem;
     }
 
-    footer {
-        max-width: var(--content-width);
-        margin: 0 auto;
-        padding: 3rem 1.25rem;
-        color: var(--muted);
-        font-size: 0.85rem;
+    .site-footer .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .site-footer strong {
+        color: var(--paper);
+    }
+
+    .site-footer p {
+        margin: 0.35rem 0 0;
+    }
+
+    .footer-meta {
+        text-align: right;
+    }
+
+    .footer-meta a {
+        color: var(--paper);
+        text-decoration: none;
+    }
+
+    .footer-meta a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .footer-meta {
+            text-align: left;
+        }
     }
 </style>

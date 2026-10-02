@@ -3,14 +3,24 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="About | Victor Pass">
-    <article class="page">
+    <section class="banner">
+        <img
+            src="/images/cheyenne-mountain.webp"
+            srcset="/images/cheyenne-mountain-1000.webp 1000w, /images/cheyenne-mountain.webp 2000w"
+            sizes="100vw"
+            alt="Cheyenne Mountain rising above a quiet road in Colorado Springs"
+            fetchpriority="high"
+        />
+    </section>
+
+    <article class="container page">
         <p class="eyebrow">About</p>
 
-        <h1>Victor Pass</h1>
+        <h1 class="display">Victor Pass</h1>
 
-        <p class="intro">
-            I'm Stephen Smithwick. Victor Pass is my company — one
-            engineer, in Colorado Springs.
+        <p class="lede">
+            I'm Stephen Smithwick. Victor Pass is my company — one engineer, in
+            Colorado Springs.
         </p>
 
         <h2>Background</h2>
@@ -18,35 +28,33 @@ import Layout from "../layouts/Layout.astro";
         <p>
             Twenty years of building backends: distributed systems and
             infrastructure at Amazon and Snowflake, platform and principal
-            engineering before that in Sydney. Kinesis, SageMaker,
-            DynamoDB, and a long tail of things that had to stay up.
+            engineering before that in Sydney. Kinesis, SageMaker, DynamoDB, and
+            a long tail of things that had to stay up.
         </p>
 
         <p>
-            These days most of my attention is on local LLMs, agent
-            tooling, and the unglamorous problem of getting the right
-            context in front of a model.
+            These days most of my attention is on local LLMs, agent tooling, and
+            the unglamorous problem of getting the right context in front of a
+            model.
         </p>
 
         <p>
-            Victor Pass is small on purpose. My working hours are
-            genuinely limited, so I'd rather build one tool properly than
-            four badly.
+            Victor Pass is small on purpose. My working hours are genuinely
+            limited, so I'd rather build one tool properly than four badly.
         </p>
 
         <h2>How I work</h2>
 
         <p>
-            In the open, further upstream than is comfortable. Ideas get a
-            page while they're still speculative, and when I abandon
-            something I say so and leave the page up, because "I tried
-            this and it didn't work" is more useful to the next person
-            than silence.
+            In the open, further upstream than is comfortable. Ideas get a page
+            while they're still speculative, and when I abandon something I say
+            so and leave the page up, because "I tried this and it didn't work"
+            is more useful to the next person than silence.
         </p>
 
         <p>
-            I've been writing this way for nine years at CodeVantage —
-            forty-odd posts, most of it thinking out loud in public.
+            I've been writing this way for nine years at CodeVantage — forty-odd
+            posts, most of it thinking out loud in public.
         </p>
 
         <h2>If you run something in Colorado Springs</h2>
@@ -54,11 +62,10 @@ import Layout from "../layouts/Layout.astro";
         <p>I'm interested in problems, not leads.</p>
 
         <p>
-            If some part of your work is slow, manual, or held together by
-            a spreadsheet nobody else wants to touch, I'd like to hear
-            about it. No pitch attached, and I'm not going to try to sell
-            you software on a first conversation. I'm local and happy to
-            come to you.
+            If some part of your work is slow, manual, or held together by a
+            spreadsheet nobody else wants to touch, I'd like to hear about it.
+            No pitch attached, and I'm not going to try to sell you software on
+            a first conversation. I'm local and happy to come to you.
         </p>
 
         <h2>Contact</h2>
@@ -70,36 +77,68 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <style>
-    .page {
-        max-width: 800px;
-        padding: 6rem 0;
+    .banner {
+        position: relative;
+        height: clamp(240px, 42vh, 460px);
+        overflow: hidden;
+        background: var(--ink);
     }
 
-    .eyebrow {
+    .banner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 42%;
+    }
+
+    .banner::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgb(10 20 18 / 45%),
+            transparent 45%
+        );
+    }
+
+    .caption {
+        position: absolute;
+        inset: auto 0 1rem;
+        z-index: 1;
+        margin: 0 auto;
+        color: rgb(255 255 255 / 75%);
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-align: right;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
-        font-size: 0.8rem;
-        font-weight: 700;
-        opacity: 0.65;
     }
 
-    h1 {
-        margin: 0 0 2rem;
-        font-size: clamp(3rem, 8vw, 6rem);
-        line-height: 0.95;
-        letter-spacing: -0.04em;
+    .page {
+        max-width: calc(46rem + 2 * var(--gutter));
+        margin: 0 auto;
+        padding-top: 4.5rem;
+        font-size: 1.075rem;
+    }
+
+    .lede {
+        margin-bottom: 1rem;
+        color: var(--ink-soft);
     }
 
     h2 {
-        margin-top: 4rem;
+        margin: 3.5rem 0 0.75rem;
+        font-size: 1.5rem;
+        letter-spacing: -0.02em;
     }
 
     p {
-        line-height: 1.7;
+        line-height: 1.75;
     }
 
-    .intro {
-        font-size: 1.4rem;
-        opacity: 0.75;
+    a {
+        color: var(--accent);
+        font-weight: 600;
+        text-underline-offset: 0.2em;
     }
 </style>

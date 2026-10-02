@@ -6,12 +6,21 @@ import { getCollection } from "astro:content";
 const products = await getCollection("products");
 ---
 
-<Layout title="Victor Pass">
+<Layout title="Victor Pass" overlay>
     <section class="hero">
-        <div class="hero-content">
+        <img
+            class="hero-image"
+            src="/images/gold-camp-road.webp"
+            srcset="/images/gold-camp-road-1000.webp 1000w, /images/gold-camp-road.webp 2000w"
+            sizes="100vw"
+            alt="Granite spires above a mountain meadow along the dirt road up to Victor, Colorado"
+            fetchpriority="high"
+        />
+
+        <div class="container hero-content">
             <p class="eyebrow">Victor Pass Development · Colorado Springs</p>
 
-            <h1>I build small tools, in public.</h1>
+            <h1 class="display">I build small tools, in public.</h1>
 
             <p class="lede">
                 Victor Pass is one engineer. I write software with a bias toward
@@ -21,23 +30,35 @@ const products = await getCollection("products");
 
             <div class="actions">
                 <a class="button primary" href="/products/">
-                    Explore products
+                    Explore products →
                 </a>
-                <a class="button" href="/about/">
+                <a class="button ghost" href="/about/">
                     About Victor Pass
                 </a>
             </div>
         </div>
+    </section>
 
-        <div class="logo">
-            <img src="/VictorPass.logo.png" alt="Victor Pass logo" />
+    <section class="container products-section">
+        <div class="section-head">
+            <div>
+                <p class="eyebrow">Currently building</p>
+                <h2 class="section-title">Tools in progress.</h2>
+            </div>
+            <p>What I'm building at Victor Pass right now, with live demos.</p>
+        </div>
+
+        <div class="products">
+            {products.map((product) => (
+                <ProductCard product={product} />
+            ))}
         </div>
     </section>
 
-    <section class="features" aria-label="What I build">
+    <section class="container features" aria-label="How I build">
         <article>
             <span class="number">01</span>
-            <h2>Small enough to understand</h2>
+            <h3>Small enough to understand</h3>
             <p>
                 Interface simplicity first, internal simplicity second. A tool I
                 can't hold in my head is one I'll eventually be afraid to
@@ -47,7 +68,7 @@ const products = await getCollection("products");
 
         <article>
             <span class="number">02</span>
-            <h2>Evidence over instinct</h2>
+            <h3>Evidence over instinct</h3>
             <p>
                 I've benchmarked my own "optimizations" before and found I was
                 measuring noise. Checking is cheaper than assuming.
@@ -56,175 +77,173 @@ const products = await getCollection("products");
 
         <article>
             <span class="number">03</span>
-            <h2>Ideas stay visible</h2>
+            <h3>Ideas stay visible</h3>
             <p>
                 Not every idea becomes a product. I'd rather show the ones that
                 didn't pan out than pretend only the successes happened.
             </p>
         </article>
     </section>
-
-    <section class="callout">
-        <p class="eyebrow">Currently building</p>
-        <h2>Tools in progress.</h2>
-        <p>What I'm building at Victor Pass right now, with live demos.</p>
-
-        <div class="products">
-            {products.map((product) => (
-                <ProductCard product={product} />
-            ))}
-        </div>
-    </section>
 </Layout>
 
 <style>
     .hero {
-        min-height: 70vh;
-        display: grid;
-        grid-template-columns: 1.5fr 1fr;
-        align-items: center;
-        gap: 4rem;
-        padding: 5rem 0;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: min(92vh, 900px);
+        padding: 8rem 0 2rem;
+        overflow: hidden;
+        background: var(--ink);
+        color: #fff;
+        isolation: isolate;
     }
 
-    .eyebrow {
-        margin: 0 0 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        font-size: 0.8rem;
-        font-weight: 700;
-        opacity: 0.65;
+    .hero-image {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 35%;
     }
 
-    h1 {
-        max-width: 800px;
-        margin: 0;
-        font-size: clamp(3rem, 7vw, 6rem);
-        line-height: 0.95;
-        letter-spacing: -0.04em;
+    .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background:
+            linear-gradient(
+                to top,
+                rgb(10 20 18 / 88%) 0%,
+                rgb(10 20 18 / 55%) 40%,
+                rgb(10 20 18 / 10%) 75%,
+                rgb(10 20 18 / 35%) 100%
+            ),
+            linear-gradient(to right, rgb(10 20 18 / 45%), transparent 70%);
     }
 
-    .lede {
-        max-width: 650px;
-        margin: 2rem 0;
-        font-size: 1.25rem;
-        line-height: 1.6;
-        opacity: 0.75;
+    .hero-content {
+        padding-bottom: 3rem;
     }
 
-    .logo {
-        display: grid;
-        place-items: center;
+    .hero .eyebrow {
+        color: var(--granite);
     }
 
-    .logo img {
-        width: min(100%, 420px);
-        height: auto;
-        filter: drop-shadow(0 1rem 2rem rgb(0 0 0 / 15%));
-        transition: transform 500ms ease;
+    .hero .display {
+        max-width: 14ch;
+        text-shadow: 0 2px 24px rgb(0 0 0 / 25%);
     }
 
-    .logo img:hover {
-        transform: rotate(-2deg) scale(1.03);
+    .hero .lede {
+        color: rgb(255 255 255 / 82%);
     }
 
     .actions {
         display: flex;
-        gap: 1rem;
         flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 2.25rem;
     }
 
-    .button {
-        display: inline-block;
-        padding: 0.8rem 1.2rem;
-        border: 1px solid currentColor;
-        border-radius: 999px;
-        text-decoration: none;
-        transition:
-            transform 150ms ease,
-            background 150ms ease;
+    .hero .button.primary {
+        background: var(--paper);
+        border-color: var(--paper);
+        color: var(--ink);
     }
 
-    .button:hover {
-        transform: translateY(-2px);
+    .hero .button.primary:hover {
+        background: #fff;
+        border-color: #fff;
     }
 
-    .button.primary {
-        background: currentColor;
-        color: var(--page-background);
+    .button.ghost {
+        background: rgb(255 255 255 / 8%);
+        border-color: rgb(255 255 255 / 35%);
+        color: #fff;
+        backdrop-filter: blur(6px);
+    }
+
+    .button.ghost:hover {
+        border-color: #fff;
+    }
+
+    .caption {
+        margin: 0;
+        color: rgb(255 255 255 / 55%);
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-align: right;
+        text-transform: uppercase;
+    }
+
+    .products-section {
+        padding-top: 6rem;
+    }
+
+    .section-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem 3rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .section-head > p {
+        max-width: 24rem;
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+    }
+
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 1.5rem;
     }
 
     .features {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-        padding: 5rem 0;
-        border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
-    }
-
-    .features article {
-        padding: 1.5rem 0;
+        gap: 2.5rem;
+        margin-top: 6rem;
+        padding-top: 3rem;
+        border-top: 1px solid var(--border);
     }
 
     .number {
-        font-family: monospace;
-        opacity: 0.5;
+        color: var(--clay);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
     }
 
-    .features h2 {
-        margin: 1rem 0 0.5rem;
+    .features h3 {
+        margin: 0.75rem 0 0.5rem;
+        font-size: 1.2rem;
+        letter-spacing: -0.015em;
     }
 
     .features p {
-        line-height: 1.6;
-        opacity: 0.7;
-    }
-
-    .callout {
-        padding: 5rem;
-        margin: 2rem 0 5rem;
-        border-radius: 1.5rem;
-        background: color-mix(in srgb, currentColor 7%, transparent);
-    }
-
-    .callout h2 {
         margin: 0;
-        font-size: clamp(2rem, 5vw, 4rem);
+        color: var(--muted);
+        line-height: 1.65;
     }
 
-    .callout > p:not(.eyebrow) {
-        max-width: 600px;
-        line-height: 1.6;
-        opacity: 0.7;
-    }
-
-    .callout .products {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-top: 3rem;
-    }
-
-    .callout .products :global(.product) {
-        background: var(--page-background);
-    }
-
-    @media (max-width: 700px) {
+    @media (max-width: 760px) {
         .hero {
-            grid-template-columns: 1fr;
-            padding: 3rem 0;
-        }
-
-        .logo {
-            order: -1;
+            min-height: 85vh;
+            padding-top: 6rem;
         }
 
         .features {
             grid-template-columns: 1fr;
-        }
-
-        .callout {
-            padding: 2rem;
+            gap: 2rem;
         }
     }
 </style>
