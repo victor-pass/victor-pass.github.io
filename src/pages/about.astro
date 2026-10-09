@@ -2,7 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="About | Victor Pass">
+<Layout
+    title="About | Victor Pass"
+    description="I'm Stephen Smithwick. Victor Pass is my company: one engineer, in Colorado Springs."
+>
     <section class="banner">
         <img
             src="/images/cheyenne-mountain.webp"
@@ -39,8 +42,8 @@ import Layout from "../layouts/Layout.astro";
         </p>
 
         <p>
-            Victor Pass is small on purpose. My working hours are genuinely
-            limited, so I'd rather build one tool properly than four badly.
+            Victor Pass is small on purpose. I'd rather take on focused jobs and
+            do each one properly than build you something overly-complicated.
         </p>
 
         <h2>How I work</h2>
@@ -53,11 +56,12 @@ import Layout from "../layouts/Layout.astro";
         </p>
 
         <p>
-            I've been writing this way for nine years at CodeVantage — forty-odd
-            posts, most of it thinking out loud in public.
+            My blog,{" "}
+            <a href="https://stephensmithwick.github.io/">CodeVantage</a>, has
+            nine years of this: forty-odd posts, most of them thinking out loud.
         </p>
 
-        <h2>If you run something in Colorado Springs</h2>
+        <h2 id="work">Working with me</h2>
 
         <p>I'm interested in problems, not leads.</p>
 
@@ -68,9 +72,32 @@ import Layout from "../layouts/Layout.astro";
             a first conversation. I'm local and happy to come to you.
         </p>
 
+        <h3>How it usually starts</h3>
+
+        <ol>
+            <li>Email me about the problem. A few sentences is enough.</li>
+            <li>
+                We talk, in person if you're local. No charge, and no pitch.
+            </li>
+            <li>
+                If there's something worth building, I'll suggest a small first
+                step before anything bigger.
+            </li>
+        </ol>
+
+        <p>
+            <a class="button primary" href="mailto:work@victorpass.dev">
+                work@victorpass.dev
+            </a>
+        </p>
+
         <h2>Contact</h2>
 
         <p>
+            New work:
+            <a href="mailto:work@victorpass.dev">work@victorpass.dev</a>
+            <br />
+            Everything else:
             <a href="mailto:hello@victorpass.dev">hello@victorpass.dev</a>
         </p>
     </article>
@@ -132,11 +159,16 @@ import Layout from "../layouts/Layout.astro";
         letter-spacing: -0.02em;
     }
 
-    p {
+    #work {
+        scroll-margin-top: 6rem; /* clear the sticky header */
+    }
+
+    p,
+    li {
         line-height: 1.75;
     }
 
-    a {
+    a:not(.button) {
         color: var(--accent);
         font-weight: 600;
         text-underline-offset: 0.2em;

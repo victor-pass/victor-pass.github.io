@@ -9,7 +9,12 @@ const products = defineCollection({
     description: z.string(),
     status: z.string(),
     url: z.string().url().optional(),
+    repo: z.string().url().optional(),
     screenshots: z.array(z.string()).optional(),
+    /** Dated changelog entries; order doesn't matter, pages sort newest first. */
+    updates: z
+      .array(z.object({ date: z.coerce.date(), notes: z.array(z.string()) }))
+      .optional(),
   }),
 });
 

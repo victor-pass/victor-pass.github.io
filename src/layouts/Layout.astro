@@ -2,6 +2,8 @@
 interface Props {
     title?: string;
     description?: string;
+    /** Path or URL for og:image / twitter:image. */
+    image?: string;
     /** Header floats transparently over a full-bleed hero image. */
     overlay?: boolean;
 }
@@ -9,8 +11,12 @@ interface Props {
 const {
     title = "Victor Pass",
     description = "Victor Pass Development — small, focused software built in Colorado Springs.",
+    image = "/VictorPass.logo.png",
     overlay = false,
 } = Astro.props;
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL(image, Astro.site);
 ---
 
 <!doctype html>
@@ -22,6 +28,16 @@ const {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <meta name="description" content={description} />
         <meta name="theme-color" content="#12211e" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Victor Pass" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:image" content={imageUrl} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -42,6 +58,7 @@ const {
                 <div class="links">
                     <a href="/products/">Products</a>
                     <a href="/about/">About</a>
+                    <a href="/about/#work">Work with me</a>
                 </div>
             </nav>
         </header>
@@ -57,7 +74,9 @@ const {
                     <p>Colorado Springs, Colorado · 38.8° N, 104.8° W</p>
                 </div>
                 <div class="footer-meta">
-                    <a href="mailto:hello@victorpass.dev">hello@victorpass.dev</a>
+                    <p>New work: <a href="mailto:work@victorpass.dev">work@victorpass.dev</a></p>
+                    <p><a href="mailto:hello@victorpass.dev">hello@victorpass.dev</a></p>
+                    <p><a href="https://github.com/victor-pass">GitHub</a></p>
                     <p>© {new Date().getFullYear()}</p>
                 </div>
             </div>
@@ -192,10 +211,6 @@ const {
         max-width: 42rem;
         font-size: 1.075rem;
         line-height: 1.75;
-    }
-
-    .prose h1 {
-        display: none; /* product markdown repeats the page title */
     }
 
     .prose h2 {

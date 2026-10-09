@@ -15,34 +15,61 @@ export async function getStaticPaths() {
 const { product } = Astro.props;
 const { Content } = await render(product);
 const screenshots = product.data.screenshots ?? [];
+const updates = [...(product.data.updates ?? [])].sort(
+    (a, b) => b.date.getTime() - a.date.getTime(),
+);
+const [latest, ...earlier] = updates;
+const formatDate = (date: Date) =>
+    date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+    });
 ---
 
-<Layout title={`${product.data.title} | Victor Pass`}>
+<Layout
+    title={`${product.data.title} | Victor Pass`}
+    description={product.data.description}
+    image={screenshots[0]}
+>
     <article class="container page">
         <a class="back" href="/products/">← All products</a>
 
-        <div class="hero">
-            <div class="hero-text">
+        <div class="layout">
+            <div class="intro">
                 <p class="eyebrow">{product.data.status}</p>
 
                 <h1 class="display">{product.data.title}</h1>
 
                 <p class="description">{product.data.description}</p>
 
-                {product.data.url && (
-                    <a
-                        class="button primary"
-                        href={product.data.url}
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        Visit {product.data.title} →
-                    </a>
-                )}
+                <div class="actions">
+                    {product.data.url && (
+                        <a
+                            class="button primary"
+                            href={product.data.url}
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            Visit {product.data.title} →
+                        </a>
+                    )}
+                    {product.data.repo && (
+                        <a
+                            class="button"
+                            href={product.data.repo}
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            Source on GitHub →
+                        </a>
+                    )}
+                </div>
             </div>
 
             {screenshots.length > 0 && (
-                <div class="hero-media">
+                <div class="media">
                     <div class="media-frame">
                         <ProductCarousel
                             client:load
@@ -52,10 +79,60 @@ const screenshots = product.data.screenshots ?? [];
                     </div>
                 </div>
             )}
-        </div>
 
-        <div class="prose content">
-            <Content />
+            <div class="prose content">
+                <Content />
+
+                <h2>Will it stay free?</h2>
+                <p>
+                    {product.data.title} is free to use, and right now it costs
+                    me nothing to run. If that changes and I can't keep giving
+                    it away:
+                </p>
+                <ul>
+                    <li>I'll post the change here at least 60 days before it happens.</li>
+                    <li>You'll be able to download your data before anything changes.</li>
+                    <li>The source stays public on GitHub, so you can run your own copy.</li>
+                </ul>
+            </div>
+
+            {latest && (
+                <aside class="updates" aria-labelledby="updates-title">
+                    <h2 id="updates-title">Updates</h2>
+
+                    <h3>
+                        <time datetime={latest.date.toISOString().slice(0, 10)}>
+                            {formatDate(latest.date)}
+                        </time>
+                    </h3>
+                    <ul>
+                        {latest.notes.map((note) => <li>{note}</li>)}
+                    </ul>
+
+                    {earlier.length > 0 && (
+                        <details>
+                            <summary>Earlier updates</summary>
+                            {earlier.map((update) => (
+                                <>
+                                    <h3>
+                                        <time datetime={update.date.toISOString().slice(0, 10)}>
+                                            {formatDate(update.date)}
+                                        </time>
+                                    </h3>
+                                    <ul>
+                                        {update.notes.map((note) => <li>{note}</li>)}
+                                    </ul>
+                                </>
+                            ))}
+                        </details>
+                    )}
+                </aside>
+            )}
+
+            <div class="prose cta">
+                <p>Want something like this for your own work?</p>
+                <a class="button primary" href="/about/#work">Work with me →</a>
+            </div>
         </div>
     </article>
 </Layout>
@@ -76,12 +153,50 @@ const screenshots = product.data.screenshots ?? [];
         color: var(--ink);
     }
 
-    .hero {
+    /* Desktop: intro, body and CTA on the left; screenshots and updates on
+       the right. Phone: one column, with updates just before the CTA. */
+    .layout {
         display: grid;
         grid-template-columns: 1.1fr 1fr;
-        align-items: center;
+        grid-template-areas:
+            "intro media"
+            "content updates"
+            "cta updates";
         gap: 3rem;
         margin-top: 2.5rem;
+    }
+
+    .intro {
+        grid-area: intro;
+        align-self: center;
+    }
+
+    .media {
+        grid-area: media;
+        min-width: 0;
+    }
+
+    .content {
+        grid-area: content;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .cta {
+        grid-area: cta;
+    }
+
+    .updates {
+        grid-area: updates;
+        align-self: start;
+        position: sticky;
+        top: 6rem; /* clear the sticky header */
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        font-size: 0.95rem;
+        line-height: 1.65;
     }
 
     .description {
@@ -92,19 +207,50 @@ const screenshots = product.data.screenshots ?? [];
         line-height: 1.6;
     }
 
-    .hero-media {
-        min-width: 0;
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
     }
 
-    .content {
-        margin-top: 5rem;
-        padding-top: 1rem;
-        border-top: 1px solid var(--border);
+    .updates h2 {
+        margin: 3rem 0 0.75rem;
+        font-size: 1.5rem;
+        letter-spacing: -0.02em;
+    }
+
+    .updates h3 {
+        margin: 1.25rem 0 0.25rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .updates ul {
+        margin: 0;
+        padding-left: 1.1rem;
+    }
+
+    .updates summary {
+        margin-top: 1.25rem;
+        color: var(--accent);
+        font-weight: 600;
+        cursor: pointer;
     }
 
     @media (max-width: 800px) {
-        .hero {
+        .layout {
             grid-template-columns: 1fr;
+            grid-template-areas:
+                "intro"
+                "media"
+                "content"
+                "updates"
+                "cta";
+        }
+
+        .updates {
+            position: static;
         }
     }
 </style>

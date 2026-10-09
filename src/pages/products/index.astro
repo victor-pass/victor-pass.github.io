@@ -6,7 +6,10 @@ import { getCollection } from "astro:content";
 const products = await getCollection("products");
 ---
 
-<Layout title="Products | Victor Pass">
+<Layout
+    title="Products | Victor Pass"
+    description="The small tools I'm building at Victor Pass, each with a live demo."
+>
     <section class="container page">
         <p class="eyebrow">Products</p>
 
@@ -14,7 +17,7 @@ const products = await getCollection("products");
 
         <p class="lede">
             A small collection of projects currently under development at Victor
-            Pass.
+            Pass. Each one is free to use.
         </p>
 
         <div class="products">

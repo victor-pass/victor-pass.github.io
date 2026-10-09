@@ -6,7 +6,11 @@ import { getCollection } from "astro:content";
 const products = await getCollection("products");
 ---
 
-<Layout title="Victor Pass" overlay>
+<Layout
+    title="Victor Pass"
+    description="Focused tools, built in the open. Victor Pass is one engineer in Colorado Springs, targetting local work."
+    overlay
+>
     <section class="hero">
         <img
             class="hero-image"
@@ -20,20 +24,24 @@ const products = await getCollection("products");
         <div class="container hero-content">
             <p class="eyebrow">Victor Pass Development · Colorado Springs</p>
 
-            <h1 class="display">I build small tools, in public.</h1>
+            <h1 class="display">Focused tools, built in the open.</h1>
 
             <p class="lede">
-                Victor Pass is one engineer. I write software with a bias toward
-                tools small enough to keep in your head, and I'd rather ship one
-                thing properly than four things badly.
+                Victor Pass is one engineer. I build my own tools, and I'm
+                straightforward about how they're run and paid for.
+            </p>
+
+            <p class="availability">
+                Taking on local work in Colorado Springs: focused jobs, not
+                sprawling ones.
             </p>
 
             <div class="actions">
-                <a class="button primary" href="/products/">
-                    Explore products →
+                <a class="button primary" href="/about/#work">
+                    Work with me →
                 </a>
-                <a class="button ghost" href="/about/">
-                    About Victor Pass
+                <a class="button ghost" href="/products/">
+                    Explore products
                 </a>
             </div>
         </div>
@@ -42,10 +50,13 @@ const products = await getCollection("products");
     <section class="container products-section">
         <div class="section-head">
             <div>
-                <p class="eyebrow">Currently building</p>
-                <h2 class="section-title">Tools in progress.</h2>
+                <p class="eyebrow">Projects</p>
+                <h2 class="section-title">Recent work.</h2>
             </div>
-            <p>What I'm building at Victor Pass right now, with live demos.</p>
+            <p>
+                What I'm building and running now. Each one has a free live
+                demo.
+            </p>
         </div>
 
         <div class="products">
@@ -60,29 +71,40 @@ const products = await getCollection("products");
             <span class="number">01</span>
             <h3>Small enough to understand</h3>
             <p>
-                Interface simplicity first, internal simplicity second. A tool I
-                can't hold in my head is one I'll eventually be afraid to
-                change.
+                Interface simplicity first, internal simplicity second.
+                Complicated software is slow and risky to update; small keeps
+                quality high and changes easy.
             </p>
         </article>
 
         <article>
             <span class="number">02</span>
-            <h3>Evidence over instinct</h3>
+            <h3>Evidence based</h3>
             <p>
                 I've benchmarked my own "optimizations" before and found I was
-                measuring noise. Checking is cheaper than assuming.
+                measuring noise. I don't assume I'm correct; I verify it.
             </p>
         </article>
 
         <article>
             <span class="number">03</span>
-            <h3>Ideas stay visible</h3>
+            <h3>Open development</h3>
             <p>
-                Not every idea becomes a product. I'd rather show the ones that
-                didn't pan out than pretend only the successes happened.
+                I share work early and often, so we can find the best solution
+                together. Ideas that don't work out get dropped in the open, not
+                hidden.
             </p>
         </article>
+    </section>
+
+    <section class="container closing">
+        <p class="lede">
+            If some part of your work is slow, manual, or held together by a
+            spreadsheet nobody wants to touch, I'd like to hear about it.
+        </p>
+        <a class="button primary" href="/about/#work">
+            Work with me →
+        </a>
     </section>
 </Layout>
 
@@ -141,6 +163,12 @@ const products = await getCollection("products");
 
     .hero .lede {
         color: rgb(255 255 255 / 82%);
+    }
+
+    .availability {
+        margin: 1.5rem 0 0;
+        color: var(--granite);
+        font-weight: 600;
     }
 
     .actions {
@@ -233,6 +261,14 @@ const products = await getCollection("products");
         margin: 0;
         color: var(--muted);
         line-height: 1.65;
+    }
+
+    .closing {
+        margin-top: 5rem;
+    }
+
+    .closing .lede {
+        margin: 0 0 1.75rem;
     }
 
     @media (max-width: 760px) {
