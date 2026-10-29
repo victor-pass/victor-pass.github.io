@@ -50,8 +50,10 @@ const LOGO = {
     // installed package, e.g. "@fontsource/montserrat/files/montserrat-latin-700-normal.woff".
     // --font overrides this.
     font: "@fontsource/inter/files/inter-latin-800-normal.woff",
-    iconWidth: 950,
-    iconTop: 205,
+    // Icon is scaled to fit this box, centered, and sits on iconBottom.
+    iconMaxWidth: 950,
+    iconMaxHeight: 600,
+    iconBottom: 780,
     textCapHeight: 98, // height of the capital letters
     textBaseline: 970,
     textTracking: 0.08, // extra space between letters, as a fraction of font size
@@ -62,7 +64,22 @@ const out = (file) => path.join(opts.out, file);
 await mkdir(opts.out, { recursive: true });
 
 // Render big once, trim to the drawn pixels, and scale down from that.
-const master = await sharp(svg, { density: 72 * 12 })
+// The root width/height are replaced with plain pixels sized from the
+// viewBox, so declared size and units (pt, mm, ...) don't matter.
+const MASTER_SIZE = 3000;
+const sized = (() => {
+    const text = svg.toString("utf8");
+    const root = text.match(/<svg\b[^>]*>/)[0];
+    const viewBox = root.match(/viewBox\s*=\s*["']([^"']+)["']/);
+    if (!viewBox) throw new Error(`${src}: root <svg> needs a viewBox`);
+    const [, , vbWidth, vbHeight] = viewBox[1].trim().split(/[\s,]+/).map(Number);
+    const scale = MASTER_SIZE / Math.max(vbWidth, vbHeight);
+    const newRoot = root
+        .replace(/\s(width|height)\s*=\s*["'][^"']*["']/g, "")
+        .replace(/^<svg/, `<svg width="${Math.round(vbWidth * scale)}" height="${Math.round(vbHeight * scale)}"`);
+    return Buffer.from(text.replace(root, newRoot));
+})();
+const master = await sharp(sized)
     .png()
     .trim()
     .toBuffer();
@@ -139,15 +156,18 @@ const textSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${LOGO.size}" he
   <path transform="translate(${dx} ${LOGO.textBaseline})" fill="${LOGO.color}" d="${textPath.toPathData(2)}"/>
 </svg>`;
 
-const logoIcon = await sharp(master).resize({ width: LOGO.iconWidth }).png().toBuffer();
+const { data: logoIcon, info: iconInfo } = await sharp(master)
+    .resize(LOGO.iconMaxWidth, LOGO.iconMaxHeight, { fit: "inside" })
+    .png()
+    .toBuffer({ resolveWithObject: true });
 await sharp({
     create: { width: LOGO.size, height: LOGO.size, channels: 4, background: LOGO.background },
 })
     .composite([
         {
             input: logoIcon,
-            left: Math.round((LOGO.size - LOGO.iconWidth) / 2),
-            top: LOGO.iconTop,
+            left: Math.round((LOGO.size - iconInfo.width) / 2),
+            top: LOGO.iconBottom - iconInfo.height,
         },
         { input: Buffer.from(textSvg), left: 0, top: 0 },
     ])
