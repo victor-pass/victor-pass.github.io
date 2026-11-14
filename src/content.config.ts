@@ -10,7 +10,12 @@ const products = defineCollection({
     status: z.string(),
     url: z.string().url().optional(),
     repo: z.string().url().optional(),
+    /** Stills for the product card, link previews, and the start of the page carousel. */
     screenshots: z.array(z.string()).optional(),
+    /** Demo videos shown in the page carousel after the screenshots. */
+    videos: z
+      .array(z.object({ src: z.string(), title: z.string(), caption: z.string() }))
+      .optional(),
     /** Dated changelog entries; order doesn't matter, pages sort newest first. */
     updates: z
       .array(z.object({ date: z.coerce.date(), notes: z.array(z.string()) }))

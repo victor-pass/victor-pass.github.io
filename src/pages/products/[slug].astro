@@ -15,6 +15,7 @@ export async function getStaticPaths() {
 const { product } = Astro.props;
 const { Content } = await render(product);
 const screenshots = product.data.screenshots ?? [];
+const slides = [...screenshots.map((src) => ({ src })), ...(product.data.videos ?? [])];
 const updates = [...(product.data.updates ?? [])].sort(
     (a, b) => b.date.getTime() - a.date.getTime(),
 );
@@ -68,12 +69,12 @@ const formatDate = (date: Date) =>
                 </div>
             </div>
 
-            {screenshots.length > 0 && (
+            {slides.length > 0 && (
                 <div class="media">
                     <div class="media-frame">
                         <ProductCarousel
                             client:load
-                            images={screenshots}
+                            slides={slides}
                             alt={product.data.title}
                         />
                     </div>

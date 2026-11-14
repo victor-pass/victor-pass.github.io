@@ -23,10 +23,28 @@
     flex: 0 0 100%;
     display: grid;
     place-items: center;
-    padding: 1.5rem clamp(1.5rem, 4vw, 2.5rem) 3.5rem;
+    align-content: start;
+    gap: 1rem;
+    margin: 0;
+    padding: 1.5rem clamp(1.5rem, 4vw, 2.5rem) 2rem;
 }
 
-.pc-slide img {
+.pc-caption {
+    max-width: 26rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    text-align: center;
+}
+
+.pc-caption strong {
+    display: block;
+    color: var(--ink);
+    font-size: 1rem;
+}
+
+.pc-slide img,
+.pc-slide video {
     max-height: 520px;
     width: auto;
     max-width: 100%;

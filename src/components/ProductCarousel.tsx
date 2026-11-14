@@ -1,21 +1,31 @@
-import { createSignal, onCleanup, onMount, For, Show } from "solid-js";
+import { createEffect, createSignal, onCleanup, For, Show } from "solid-js";
 import "./ProductCarousel.css";
 
+export interface Slide {
+    src: string;
+    title?: string;
+    caption?: string;
+}
+
 interface Props {
-    images: string[];
+    slides: Slide[];
     alt: string;
     autoplayMs?: number;
 }
 
+const isVideo = (src: string) => /\.(webm|mp4)$/i.test(src);
+
 export default function ProductCarousel(props: Props) {
-    const { images, alt } = props;
+    const { slides, alt } = props;
     const autoplayMs = props.autoplayMs ?? 3500;
-    const count = images.length;
+    const count = slides.length;
     const multi = count > 1;
 
     const [active, setActive] = createSignal(0);
+    const videos: (HTMLVideoElement | undefined)[] = [];
 
-    let timer: ReturnType<typeof setInterval> | undefined;
+    let playing = true;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     let resumeTimeout: ReturnType<typeof setTimeout> | undefined;
 
     const wrap = (index: number) => ((index % count) + count) % count;
@@ -24,15 +34,23 @@ export default function ProductCarousel(props: Props) {
     const next = () => goTo(active() + 1);
     const prev = () => goTo(active() - 1);
 
+    // Images advance on a timer; videos advance when they end.
+    const schedule = () => {
+        if (timer) clearTimeout(timer);
+        timer = undefined;
+        if (playing && multi && !isVideo(slides[active()].src)) {
+            timer = setTimeout(next, autoplayMs);
+        }
+    };
+
     const startAutoplay = () => {
-        if (!multi) return;
-        stopAutoplay();
-        timer = setInterval(next, autoplayMs);
+        playing = true;
+        schedule();
     };
 
     const stopAutoplay = () => {
-        if (timer) clearInterval(timer);
-        timer = undefined;
+        playing = false;
+        schedule();
     };
 
     const interact = (fn: () => void) => {
@@ -42,12 +60,24 @@ export default function ProductCarousel(props: Props) {
         resumeTimeout = setTimeout(startAutoplay, autoplayMs * 1.5);
     };
 
-    onMount(() => {
-        startAutoplay();
-        onCleanup(() => {
-            stopAutoplay();
-            if (resumeTimeout) clearTimeout(resumeTimeout);
+    // Play only the active video, from the start, and time the active image.
+    createEffect(() => {
+        const current = active();
+        videos.forEach((video, i) => {
+            if (!video) return;
+            if (i === current) {
+                video.currentTime = 0;
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+            }
         });
+        schedule();
+    });
+
+    onCleanup(() => {
+        stopAutoplay();
+        if (resumeTimeout) clearTimeout(resumeTimeout);
     });
 
     return (
@@ -62,11 +92,32 @@ export default function ProductCarousel(props: Props) {
                         class="pc-track"
                         style={{ transform: `translateX(-${active() * 100}%)` }}
                     >
-                        <For each={images}>
-                            {(src, i) => (
-                                <div class="pc-slide">
-                                    <img src={src} alt={`${alt} screenshot ${i() + 1}`} />
-                                </div>
+                        <For each={slides}>
+                            {(slide, i) => (
+                                <figure class="pc-slide">
+                                    {isVideo(slide.src) ? (
+                                        <video
+                                            ref={(el) => (videos[i()] = el)}
+                                            src={slide.src}
+                                            aria-label={slide.title ?? `${alt} demo ${i() + 1}`}
+                                            muted
+                                            playsinline
+                                            preload="metadata"
+                                            loop={!multi}
+                                            onEnded={() => multi && i() === active() && next()}
+                                        />
+                                    ) : (
+                                        <img src={slide.src} alt={slide.title ?? `${alt} screenshot ${i() + 1}`} />
+                                    )}
+                                    <Show when={slide.title || slide.caption}>
+                                        <figcaption class="pc-caption">
+                                            <Show when={slide.title}>
+                                                <strong>{slide.title}</strong>
+                                            </Show>
+                                            {slide.caption}
+                                        </figcaption>
+                                    </Show>
+                                </figure>
                             )}
                         </For>
                     </div>
@@ -76,7 +127,7 @@ export default function ProductCarousel(props: Props) {
                     <button
                         class="pc-arrow pc-prev"
                         type="button"
-                        aria-label="Previous screenshot"
+                        aria-label="Previous slide"
                         onClick={() => interact(prev)}
                     >
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
@@ -92,7 +143,7 @@ export default function ProductCarousel(props: Props) {
                     <button
                         class="pc-arrow pc-next"
                         type="button"
-                        aria-label="Next screenshot"
+                        aria-label="Next slide"
                         onClick={() => interact(next)}
                     >
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
@@ -110,13 +161,13 @@ export default function ProductCarousel(props: Props) {
 
             <Show when={multi}>
                 <div class="pc-dots">
-                    <For each={images}>
-                        {(_, i) => (
+                    <For each={slides}>
+                        {(slide, i) => (
                             <button
                                 class="pc-dot"
                                 classList={{ "pc-active": active() === i() }}
                                 type="button"
-                                aria-label={`Go to screenshot ${i() + 1}`}
+                                aria-label={`Go to ${slide.title ?? `slide ${i() + 1}`}`}
                                 onClick={() => interact(() => goTo(i()))}
                             />
                         )}

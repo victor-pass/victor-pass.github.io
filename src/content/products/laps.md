@@ -1,13 +1,42 @@
 ---
 title: Laps
-description: Scan racers' QR codes to track laps for a race, in real time, from any phone.
+description: Set up a race, scan racers' QR codes as they pass, and export results your way, from any phone.
 status: Demo Available
 url: https://laps.victorpass.dev
 repo: https://github.com/victor-pass/laps
 screenshots:
   - /products/laps-scan-mobile.png
-  - /products/laps-summary-mobile.png
+videos:
+  - src: /products/laps-demo-setup.webm
+    title: Set up
+    caption: Set up a race and share access with your team.
+  - src: /products/laps-demo-scan.webm
+    title: Scan
+    caption: Scan racers' QR codes as they go by.
+  - src: /products/laps-demo-data.webm
+    title: Data
+    caption: Import your racers, print their race IDs, and export results broken down however you choose.
 updates:
+  - date: 2026-11-13
+    notes:
+      - New Race page for race settings, racer details and reports.
+      - Set a race's lap length in m, km or mi to show distance as well as laps.
+      - Add details to racers (for example grade or team), or import them from a CSV or a list pasted from a spreadsheet. Racers are matched by id or name, and a template CSV is provided.
+      - Reports export laps, racers, or totals grouped by any racer detail, for a chosen time range.
+      - New Sync page shows which devices have reported and when each was last seen, and what this device has captured.
+      - A recent-scans feed, newest first, marks repeat scans.
+  - date: 2026-10-26
+    notes:
+      - New Racers page to add and name racers for each race, and print their QR codes as lanyard badges (9 per A4) or one per page.
+      - Racer names show in the summary, the CSV and the scan popup, including offline.
+      - Printed QR codes hold only the racer's id, never their name.
+      - The scanner recovers by itself from a stuck or closed camera.
+      - Joining a race no longer hangs the scanner on a slow connection.
+  - date: 2026-10-12
+    notes:
+      - Race links open straight in the installed app.
+      - Better portrait layout, especially when sharing a QR code.
+      - The navigation bar takes less space.
   - date: 2026-10-09
     notes:
       - Race QR codes are now links, so a new volunteer can join with their phone's own camera, with no install needed.
@@ -37,9 +66,17 @@ Instead of tallying laps by hand or by memory, volunteers scan each racer's QR c
 
 ## How it works
 
-Create a race, or join one from its QR code or link: scan it with your phone's camera, sign in with Google, and tap Join. You land on the scanner, already in the race, with nothing to install.
+### Set up a race
 
-Open the scanner, choose the front or back camera, and scan a racer's QR code to record a lap.
+Create a race and share it with your team. Volunteers join from the race's QR code or link: scan it with the phone's camera, sign in with Google, and tap Join. They land on the scanner, already in the race, with nothing to install.
+
+### Scan racers as they pass
+
+Open the scanner, choose the front or back camera, and scan each racer's QR code as they go by to record a lap.
+
+### Import, print and export
+
+Import your racer list, then print each racer's QR code to wear on race day. When the race is over, export the results broken down by whatever detail you choose.
 
 ### Works offline
 
@@ -52,7 +89,3 @@ Laps checks for duplicates when a lap is scanned, and again when it combines the
 ### See who scanned what
 
 The summary lists every racer, their lap count, and lap times. Each lap records which volunteer and which device scanned it. Devices get memorable, automatically generated names, with no setup required.
-
-### Export your results
-
-Export the race's lap data as a CSV when the event is over.
