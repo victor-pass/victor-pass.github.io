@@ -8,15 +8,14 @@ interface Props {
 const { product } = Astro.props;
 ---
 
-<a class="product" href={`/products/${product.id}/`}>
+<a class:list={["product", { "has-phone": product.data.screenshots?.[0] }]} href={`/products/${product.id}/`}>
     {product.data.screenshots?.[0] && (
-        <div class="thumb">
-            <img
-                src={product.data.screenshots[0]}
-                alt={`${product.data.title} screenshot`}
-                loading="lazy"
-            />
-        </div>
+        <img
+            class="phone"
+            src={`/products/${product.id}/shot-0.webp`}
+            alt={`${product.data.title} on a phone`}
+            loading="lazy"
+        />
     )}
     <div class="body">
         <span class="status">{product.data.status}</span>
@@ -27,10 +26,11 @@ const { product } = Astro.props;
 </a>
 
 <style>
+    /* The phone screenshot (transparent PNG → webp) sits beside the text
+       at its own aspect ratio. */
     .product {
         display: flex;
-        flex-direction: column;
-        overflow: hidden;
+        align-items: center;
         border: 1px solid var(--border);
         border-radius: var(--radius);
         background: var(--surface);
@@ -48,30 +48,29 @@ const { product } = Astro.props;
         border-color: color-mix(in srgb, var(--ink) 25%, var(--border));
     }
 
-    .thumb {
-        aspect-ratio: 16 / 10;
-        overflow: hidden;
-        border-bottom: 1px solid var(--border);
+    .phone {
+        flex: none;
+        width: clamp(5.5rem, 24vw, 7rem);
+        height: auto;
+        margin: 1.25rem 0 1.25rem 1.25rem;
+        filter: drop-shadow(0 12px 16px rgb(18 33 30 / 20%));
+        transition: transform 400ms var(--ease);
     }
 
-    .thumb img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: 50% 15%;
-        transition: transform 500ms var(--ease);
-    }
-
-    .product:hover .thumb img {
-        transform: scale(1.03);
+    .product:hover .phone {
+        transform: rotate(-2deg);
     }
 
     .body {
         display: flex;
         flex: 1;
         flex-direction: column;
+        align-self: stretch;
         padding: 1.5rem 1.75rem 1.75rem;
+    }
+
+    .has-phone .body {
+        padding-left: 1rem;
     }
 
     .status {

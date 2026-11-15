@@ -1,11 +1,36 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+// Structured data so search engines can tie the business to its owner and city.
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Victor Pass Development",
+    url: new URL("/", Astro.site).href,
+    logo: new URL("/VictorPass.logo.png", Astro.site).href,
+    email: "work@victorpass.dev",
+    areaServed: "Colorado Springs, CO",
+    address: {
+        "@type": "PostalAddress",
+        addressLocality: "Colorado Springs",
+        addressRegion: "CO",
+        addressCountry: "US",
+    },
+    founder: {
+        "@type": "Person",
+        name: "Stephen Smithwick",
+        jobTitle: "Software engineer",
+        sameAs: ["https://github.com/victor-pass", "https://stephensmithwick.github.io/"],
+    },
+};
 ---
 
 <Layout
     title="About | Victor Pass"
     description="I'm Stephen Smithwick. Victor Pass is my company: one engineer, in Colorado Springs."
 >
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
     <section class="banner">
         <img
             src="/images/cheyenne-mountain.webp"
@@ -127,18 +152,6 @@ import Layout from "../layouts/Layout.astro";
             rgb(10 20 18 / 45%),
             transparent 45%
         );
-    }
-
-    .caption {
-        position: absolute;
-        inset: auto 0 1rem;
-        z-index: 1;
-        margin: 0 auto;
-        color: rgb(255 255 255 / 75%);
-        font-size: 0.75rem;
-        letter-spacing: 0.08em;
-        text-align: right;
-        text-transform: uppercase;
     }
 
     .page {

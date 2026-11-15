@@ -15,7 +15,10 @@ export async function getStaticPaths() {
 const { product } = Astro.props;
 const { Content } = await render(product);
 const screenshots = product.data.screenshots ?? [];
-const slides = [...screenshots.map((src) => ({ src })), ...(product.data.videos ?? [])];
+const slides = [
+    ...screenshots.map((_, i) => ({ src: `/products/${product.id}/shot-${i}.webp` })),
+    ...(product.data.videos ?? []),
+];
 const updates = [...(product.data.updates ?? [])].sort(
     (a, b) => b.date.getTime() - a.date.getTime(),
 );
@@ -32,12 +35,12 @@ const formatDate = (date: Date) =>
 <Layout
     title={`${product.data.title} | Victor Pass`}
     description={product.data.description}
-    image={screenshots[0]}
+    image={screenshots[0] && `/products/${product.id}/card.jpg`}
 >
     <article class="container page">
         <a class="back" href="/products/">← All products</a>
 
-        <div class="layout">
+        <div class:list={["layout", { "no-updates": !latest }]}>
             <div class="intro">
                 <p class="eyebrow">{product.data.status}</p>
 
@@ -167,6 +170,14 @@ const formatDate = (date: Date) =>
         margin-top: 2.5rem;
     }
 
+    /* No updates: body and CTA take both columns. */
+    .layout.no-updates {
+        grid-template-areas:
+            "intro media"
+            "content content"
+            "cta cta";
+    }
+
     .intro {
         grid-area: intro;
         align-self: center;
@@ -240,7 +251,8 @@ const formatDate = (date: Date) =>
     }
 
     @media (max-width: 800px) {
-        .layout {
+        .layout,
+        .layout.no-updates {
             grid-template-columns: 1fr;
             grid-template-areas:
                 "intro"

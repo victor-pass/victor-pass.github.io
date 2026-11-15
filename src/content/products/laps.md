@@ -8,12 +8,15 @@ screenshots:
   - /products/laps-scan-mobile.png
 videos:
   - src: /products/laps-demo-setup.webm
+    small: /products/laps-demo-setup-small.webm
     title: Set up
     caption: Set up a race and share access with your team.
   - src: /products/laps-demo-scan.webm
+    small: /products/laps-demo-scan-small.webm
     title: Scan
     caption: Scan racers' QR codes as they go by.
   - src: /products/laps-demo-data.webm
+    small: /products/laps-demo-data-small.webm
     title: Data
     caption: Import your racers, print their race IDs, and export results broken down however you choose.
 updates:

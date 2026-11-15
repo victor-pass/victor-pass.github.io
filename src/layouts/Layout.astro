@@ -1,8 +1,14 @@
 ---
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/inter/latin-600.css";
+import "@fontsource/inter/latin-700.css";
+import "@fontsource/inter/latin-800.css";
+
 interface Props {
     title?: string;
     description?: string;
-    /** Path or URL for og:image / twitter:image. */
+    /** Path or URL for a 1200×630 og:image / twitter:image; defaults to the logo. */
     image?: string;
     /** Header floats transparently over a full-bleed hero image. */
     overlay?: boolean;
@@ -11,12 +17,12 @@ interface Props {
 const {
     title = "Victor Pass",
     description = "Victor Pass Development — small, focused software built in Colorado Springs.",
-    image = "/VictorPass.logo.png",
+    image,
     overlay = false,
 } = Astro.props;
 
 const pageUrl = new URL(Astro.url.pathname, Astro.site);
-const imageUrl = new URL(image, Astro.site);
+const imageUrl = new URL(image ?? "/VictorPass.logo.png", Astro.site);
 ---
 
 <!doctype html>
@@ -26,6 +32,8 @@ const imageUrl = new URL(image, Astro.site);
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" href="/icon.large.png" />
+        <link rel="sitemap" href="/sitemap.xml" />
         <meta name="description" content={description} />
         <meta name="theme-color" content="#12211e" />
         <meta property="og:type" content="website" />
@@ -34,16 +42,10 @@ const imageUrl = new URL(image, Astro.site);
         <meta property="og:description" content={description} />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:image" content={imageUrl} />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={imageUrl} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-            rel="stylesheet"
-        />
         <title>{title}</title>
     </head>
 
@@ -97,10 +99,6 @@ const imageUrl = new URL(image, Astro.site);
         --accent: #1b6f8c;
         --clay: #b5653c;
         --granite: #d8cbb8;
-
-        /* Legacy names used by components */
-        --page-background: var(--paper);
-        --text: var(--ink);
 
         --content-width: 1120px;
         --gutter: clamp(1rem, 4vw, 2rem);

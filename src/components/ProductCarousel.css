@@ -44,15 +44,111 @@
 }
 
 .pc-slide img,
-.pc-slide video {
-    max-height: 520px;
-    width: auto;
-    max-width: 100%;
+.pc-slide .pc-phone {
     border-radius: 1.25rem;
     box-shadow:
         0 1.25rem 3rem -1.25rem rgb(0 0 0 / 30%),
         0 0 0 1px color-mix(in srgb, currentColor 10%, transparent);
     display: block;
+}
+
+.pc-slide img {
+    max-height: 520px;
+    width: auto;
+    max-width: 100%;
+}
+
+/* Black status and nav bars around a cropped Pixel 10 recording. Bar
+   heights are in the phone's pixels, scaled to the frame's width. */
+.pc-phone {
+    --status-bar: 100;
+    --nav-bar: 80;
+    --phone-width: 1080;
+    --aspect: 0.5;
+    --bezel: 3px;
+    --max-h: 520px;
+    --tall: calc(
+        1 / var(--aspect) + (var(--status-bar) + var(--nav-bar)) /
+            var(--phone-width)
+    );
+    --unit: calc(100cqw / var(--phone-width));
+
+    container-type: inline-size;
+    box-sizing: border-box;
+    width: min(100%, var(--max-h) / var(--tall));
+    border: var(--bezel) solid #222;
+    background: #222;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Android Punch-Hole Camera */
+.pc-phone::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--bezel) + var(--status-bar) * 0.4 * var(--unit));
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(50 * var(--unit));
+    height: calc(50 * var(--unit));
+    background-color: #000;
+    border-radius: 50%;
+    z-index: 20;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.17);
+}
+
+/* Android White Swipe Bar */
+.pc-phone::after {
+    content: "";
+    position: absolute;
+    bottom: calc(var(--bezel) + var(--nav-bar) * 0.35 * var(--unit));
+    left: 50%;
+    transform: translate(-50%, 50%);
+    width: calc(320 * var(--unit));
+    height: calc(10 * var(--unit));
+    background-color: #ffffffcc;
+    border-radius: 999px;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.pc-phone video {
+    display: block;
+    width: 100%;
+    margin-block: calc(var(--status-bar) / var(--phone-width) * 100cqw)
+        calc(var(--nav-bar) / var(--phone-width) * 100cqw);
+}
+
+.pc-slide video.pc-zoomable {
+    cursor: zoom-in;
+}
+
+.pc-zoom {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: rgb(0 0 0 / 0%);
+    cursor: zoom-out;
+    transition: background 350ms ease;
+}
+
+.pc-zoom.pc-zoom-open {
+    background: rgb(0 0 0 / 70%);
+}
+
+.pc-zoom .pc-phone {
+    --max-h: 92dvh;
+    width: min(92vw, var(--max-h) / var(--tall));
+    border-radius: 1.25rem;
+    box-shadow: 0 2rem 4rem -1rem rgb(0 0 0 / 50%);
+    opacity: 0;
+}
+
+.pc-zoom.pc-zoom-ready .pc-phone {
+    opacity: 1;
 }
 
 .pc-arrow {
@@ -66,9 +162,9 @@
     height: 2.5rem;
     border-radius: 50%;
     border: 1px solid var(--border);
-    background: color-mix(in srgb, var(--page-background) 85%, transparent);
+    background: color-mix(in srgb, var(--paper) 85%, transparent);
     backdrop-filter: blur(6px);
-    color: var(--text);
+    color: var(--ink);
     cursor: pointer;
     transition:
         transform 150ms ease,
@@ -77,7 +173,7 @@
 
 .pc-arrow:hover {
     transform: translateY(-50%) scale(1.08);
-    background: var(--page-background);
+    background: var(--paper);
 }
 
 .pc-prev {
@@ -120,6 +216,17 @@
 }
 
 @media (max-width: 700px) {
+    .pc-zoom.pc-zoom-open {
+        background: #000;
+    }
+
+    .pc-zoom .pc-phone {
+        --max-h: 100dvh;
+        width: min(100vw, var(--max-h) / var(--tall));
+        border-radius: 0;
+        box-shadow: none;
+    }
+
     .pc-arrow {
         width: 2.1rem;
         height: 2.1rem;
